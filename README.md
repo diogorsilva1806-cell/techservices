@@ -1,5 +1,5 @@
 
-# TechService - Lenilton Jr
+# TechService - Diogo Silva
 
 ## Sistema de Gestão de Assistência Técnica
 
