@@ -97,7 +97,44 @@ class Cliente_repository:
             print(erro)
 
         finally:
-            if cursor is not None:
+            if cursor:
                 cursor.close()
-            if conexao is not None:
-                conexao.close()
+            if conexao:
+               conexao.close()
+    def atualizar(self, id_cliente, novo_nome, novo_email, novo_telefone):
+                    """
+                    Atualiza os dados de um cliente existente e regista updated_at.
+                    """
+                    conexao = None
+                    cursor = None
+                    try:
+                        conexao = get_conexao()
+                        cursor = conexao.cursor()
+
+                        sql = """
+                        UPDATE clientes
+                        SET nome = %s,
+                            email = %s,
+                            telefone = %s,
+                            updated_at = NOW()
+                        WHERE id_cliente = %s AND status = 1
+                        """
+                        valores = (novo_nome, novo_email, novo_telefone, id_cliente)
+
+                        cursor.execute(sql, valores)
+                        conexao.commit()
+
+                        if cursor.rowcount == 0:
+                            print("Nenhum cliente encontrado com esse ID!")
+                        else:
+                            print("Cliente atualizado com sucesso!")
+
+                    except Exception as erro:
+                        print("Erro ao atualizar cliente!")
+                        print(erro)
+
+                    finally:
+                        if cursor is not None:
+                            cursor.close()
+                        if conexao is not None:
+                            conexao.close()
