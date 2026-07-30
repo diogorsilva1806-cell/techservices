@@ -87,8 +87,10 @@ class Equipamento_repository:
             cursor = conexao.cursor()
 
             sql = """
-            DELETE FROM equipamentos
-            WHERE id_equipamento = %s
+            UPDATE equipamentos
+            SET status = 0,
+                deleted_at = NOW()
+            WHERE id_equipamento = %s AND status = 1
             """
 
             cursor.execute(sql, (id_equipamento,))
