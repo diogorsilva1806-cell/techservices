@@ -66,56 +66,23 @@ class Cliente_repository:
             if conexao:
                 conexao.close()
 
-    def editar_cliente(self, id_cliente, novo_nome, novo_email, novo_telefone, novo_status):
+    def excluir(self, id_cliente):
+        """
+        Exclusão lógica: marca o cliente como inativo (status = 0) e
+        regista deleted_at, sem apagar o registo da base de dados.
+        """
+        conexao = None
+        cursor = None
         try:
             conexao = get_conexao()
             cursor = conexao.cursor()
 
             sql = """
             UPDATE clientes
-            SET nome = %s,
-                email = %s,
-                telefone = %s,
-                status = %s
-            WHERE id_cliente = %s
+            SET status = 0,
+                deleted_at = NOW()
+            WHERE id_cliente = %s AND status = 1
             """
-
-            valores = (
-                novo_nome,
-                novo_email,
-                novo_telefone,
-                novo_status,
-                id_cliente
-            )
-
-            cursor.execute(sql, valores)
-            conexao.commit()
-
-            if cursor.rowcount == 0:
-                print("Nenhum cliente encontrado com esse ID!")
-            else:
-                print("Cliente atualizado com sucesso!")
-
-        except Exception as erro:
-            print("Erro ao atualizar cliente!")
-            print(erro)
-
-        finally:
-            cursor.close()
-            conexao.close()
-
-
-
-
-
-
-
-    def eliminar_cliente(self, id_cliente):
-        try:
-            conexao = get_conexao()
-            cursor = conexao.cursor()
-
-            sql = "DELETE FROM clientes WHERE id_cliente = %s"
 
             cursor.execute(sql, (id_cliente,))
             conexao.commit()
@@ -125,15 +92,12 @@ class Cliente_repository:
             else:
                 print("Cliente eliminado com sucesso!")
 
-                self.clientes = [
-                    c for c in self.clientes
-                    if c.get_id_cliente() != id_cliente
-                ]
-
         except Exception as erro:
             print("Erro ao eliminar cliente!")
             print(erro)
 
         finally:
-            cursor.close()
-            conexao.close()
+            if cursor is not None:
+                cursor.close()
+            if conexao is not None:
+                conexao.close()

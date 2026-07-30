@@ -7,7 +7,8 @@ while True:
     print("\n===== SISTEMA =====")
 
     print("1 - Adicionar Cliente")
-    print("2 - Listar Clientes - ")
+    print("2 - Listar Clientes")
+    print("3 - Eliminar Cliente")
     print("0 - Sair")
 
     opcao = input("Escolha uma opção: ")
@@ -39,6 +40,11 @@ while True:
                 print(
 
                     f"ID: {c.get('id_cliente')} | Nome: {c.get('nome')} | Tel: {c.get('telefone')} | Email: {c.get('email')} | Status: {c.get('status')}")
+
+    elif opcao == "3":
+        id_cliente = int(input("ID do cliente a eliminar: "))
+        Cliente_repository.excluir(id_cliente)
+        print("Cliente excluido com sucesso!")
 
 
     elif opcao == "0":
