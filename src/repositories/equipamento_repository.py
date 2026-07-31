@@ -7,8 +7,6 @@ class Equipamento_repository:
         self.equipamentos = []
 
     def adicionar_equipamento(self, equipamento):
-        conexao = None
-        cursor = None
 
         try:
             conexao = get_conexao()
